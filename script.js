@@ -309,62 +309,50 @@ const texts = [
         // Add more texts and correct responses here
     ];
 
-function getRandomUniqueIndex() {
-    let randomIndex;
-    do {
-        randomIndex = Math.floor(Math.random() * texts.length);
-    } while (usedIndexes.includes(randomIndex));
-    usedIndexes.push(randomIndex);
-    return randomIndex;
-}
-
-function displayText() {
-    if (attempts < maxAttempts) {
-        const randomIndex = getRandomUniqueIndex();
+// Display questions on page load
+function displayQuestions() {
+    const dynamicQuestionsDiv = document.getElementById('dynamic-questions');
+    texts.forEach((item, index) => {
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question';
         questionDiv.innerHTML = `
-            <label>${texts[randomIndex].text}</label>
-            <input type="text" name="question${attempts + 1}" required>
+            <label>${item.text}</label>
+            <input type="text" name="question${index + 1}" required>
         `;
-        document.getElementById('dynamic-questions').appendChild(questionDiv);
-        attempts++;
-    } else {
-        showResults();
-    }
+        dynamicQuestionsDiv.appendChild(questionDiv);
+    });
 }
 
-function showResults() {
-    const textBox = document.getElementById('text-box');
-    textBox.innerHTML = `Your score: ${score}/${maxAttempts}`;
+// Show email input after submitting questions
+function showEmailInput() {
     document.getElementById('questions-form').style.display = 'none';
-    document.getElementById('submit-btn').style.display = 'block';
+    document.getElementById('email-container').style.display = 'block';
 }
 
-document.getElementById('start-btn').addEventListener('click', function() {
+// Handle question form submission
+document.getElementById('questions-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const inputs = this.querySelectorAll('input[type="text"]');
+    inputs.forEach((input, index) => {
+        userChoices.push(input.value);
+        // Check answers if needed, e.g.:
+        // if (input.value === texts[index].correct) score++;
+    });
+    showEmailInput();
+});
+
+// Handle email submission
+document.getElementById('send-btn').addEventListener('click', function() {
     const emailInput = document.getElementById('email-input').value;
     if (emailInput) {
-        document.getElementById('email-hidden').value = emailInput; // Set hidden email field
-        document.getElementById('text-box').innerHTML = 'Answer the following questions:';
-        document.getElementById('email-input').style.display = 'none'; // Hide email input
-        this.style.display = 'none'; // Hide start button
-        document.getElementById('questions-form').style.display = 'block'; // Show questions form
-        displayText(); // Show the first question
+        console.log(`Email: ${emailInput}`);
+        console.log(`Answers: ${userChoices.join(', ')}`);
+        // Here, you can send the data to your backend or use it as needed
+        alert('Thank you for your submission!');
     } else {
         alert('Please enter a valid email.');
     }
 });
 
-document.getElementById('questions-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
-
-    // Log input values for each question
-    const inputs = this.querySelectorAll('input[type="text"]');
-    inputs.forEach((input, index) => {
-        console.log(`Question ${index + 1}: ${input.value}`); // Log each answer
-        // Here, you can also check the answer against the correct answer
-        // Example: if (input.value === texts[index].correct) score++;
-    });
-
-    showResults();
-});
+// Initialize questions on page load
+window.onload = displayQuestions;
