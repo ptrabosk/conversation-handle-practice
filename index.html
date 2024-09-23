@@ -7,14 +7,37 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div id="text-box"></div>
-        <div class="buttons">
-            <button id="reply-btn">Reply</button>
-            <button id="close-btn">Close</button>
-            <button id="unsubscribe-btn">Unsubscribe</button>
-        </div>
+    <!-- Email input section -->
+    <div class="container" id="email-container">
+        <h2>Please enter your email to start:</h2>
+        <input type="email" id="email-input" placeholder="Enter your email" required>
+        <button id="start-btn">Start</button>
     </div>
+
+    <!-- Questions section -->
+    <div class="container" id="questions-container" style="display: none;">
+        <div id="text-box">
+            <h2>Please answer the questions below:</h2>
+        </div>
+        <form id="questions-form" action="https://script.google.com/macros/s/AKfycbxh3rX_3AyGPxkgW94GBc4mYs1gtyxLobVGpS3mSC0z/exec" method="POST">
+            <!-- Email field (hidden, automatically filled) -->
+            <input type="hidden" id="email-hidden" name="email">
+
+            <!-- Dynamic questions will be inserted here -->
+            <div id="dynamic-questions"></div>
+
+            <!-- Buttons for user choices -->
+            <div class="buttons">
+                <button type="button" id="reply-btn">Reply</button>
+                <button type="button" id="close-btn">Close</button>
+                <button type="button" id="unsubscribe-btn">Unsubscribe</button>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" id="submit-btn">Submit</button>
+        </form>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
