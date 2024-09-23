@@ -309,6 +309,17 @@ const texts = [
         // Add more texts and correct responses here
     ];
 
+let score = 0;
+let attempts = 0;
+const maxAttempts = 20;
+const userChoices = [];
+const usedIndexes = [];  // Track used indexes to ensure uniqueness
+
+const texts = [
+    { text: "Question 1: What is your favorite color?", correct: "Blue" },
+    // Add more questions here...
+];
+
 function getRandomUniqueIndex() {
     let randomIndex;
     do {
@@ -321,131 +332,48 @@ function getRandomUniqueIndex() {
 function displayText() {
     if (attempts < maxAttempts) {
         const randomIndex = getRandomUniqueIndex();
-        const textBox = document.getElementById('text-box');
-        textBox.innerText = texts[randomIndex].text;
-        textBox.style.display = 'block';
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.innerHTML = `
+            <label>${texts[randomIndex].text}</label>
+            <input type="text" name="question${attempts + 1}" required>
+        `;
+        document.getElementById('dynamic-questions').appendChild(questionDiv);
+        attempts++;
     } else {
         showResults();
     }
 }
 
 function handleChoice(choice) {
-    const text = texts[usedIndexes[attempts]];
-    userChoices.push({
-        text: text.text,
-        correct: text.correct,
-        userChoice: choice
-    });
-
-    if (text.correct === choice) {
-        score++;
-    }
-    attempts++;
-    displayText();
+    // Logic to handle user choices if applicable
 }
 
 function showResults() {
     const textBox = document.getElementById('text-box');
-    textBox.classList.add('results');  // Add the results class for larger height and scrolling
-
-    if (score === maxAttempts) {
-        textBox.innerText = `Perfect score! You got all ${maxAttempts} answers correct.\n`;
-    } else {
-        const wrongAnswers = userChoices.filter(choice => choice.userChoice !== choice.correct);
-        textBox.innerText = `Your score: ${score}/${maxAttempts}\n\nHere are the questions you got wrong:\n`;
-
-        wrongAnswers.forEach((choice, index) => {
-            const result = document.createElement('div');
-            result.innerText = `${index + 1}. Text: "${choice.text}"\nYour Answer: ${choice.userChoice}\nCorrect Answer: ${choice.correct}\n`;
-            textBox.appendChild(result);
-        });
-
-        if (wrongAnswers.length === 0) {
-            textBox.innerText += "You got all the questions correct!";
-        }
-    }
-
-    document.querySelector('.buttons').style.display = 'none';
+    textBox.innerHTML = `Your score: ${score}/${maxAttempts}`;
+    document.getElementById('questions-form').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'block';
 }
-
-// Handle button clicks for choices
-document.getElementById('reply-btn').addEventListener('click', () => handleChoice('Reply'));
-document.getElementById('close-btn').addEventListener('click', () => handleChoice('Close'));
-document.getElementById('unsubscribe-btn').addEventListener('click', () => handleChoice('Unsubscribe'));
-
-// Handle the email input and showing the form
-document.addEventListener('DOMContentLoaded', () => {
-    const emailContainer = document.getElementById('email-container');
-    const questionsContainer = document.getElementById('questions-container');
-    const emailInput = document.getElementById('email-input');
-    const emailHidden = document.getElementById('email-hidden');
-    const startBtn = document.getElementById('start-btn');
-    const form = document.getElementById('questions-form');
-
-    // Show the questions after email is submitted
-    startBtn.addEventListener('click', () => {
-        const email = emailInput.value;
-        if (validateEmail(email)) {
-            // Hide email container and show the questions
-            emailContainer.style.display = 'none';
-            questionsContainer.style.display = 'block';
-
-            // Automatically fill the hidden email field in the form
-            emailHidden.value = email;
-
-            // Start displaying the first question
-            displayText();
-        } else {
-            alert("Please enter a valid email address.");
-        }
-    });
-
-    // Function to validate email
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
-    }
-
-    // Handle form submission to Google Sheets
-    form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent default form submission
-
-        // Prepare data for submission
-        const formData = new FormData(form);
-        formData.append('score', score);
-        formData.append('attempts', attempts);
-        formData.append('userChoices', JSON.stringify(userChoices));
-
-        // Send form data to Google Sheets using the Web App URL
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.text())
-        .then(result => {
-            alert('Form submitted successfully!');
-            // Optionally, you can hide the form or show a success message here
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error submitting the form. Please try again.');
-        });
-    });
-});
-
-// Initial display of text when the page loads
-window.onload = () => {
-    // The text box can be displayed only after email is entered
-};
 
 document.getElementById('start-btn').addEventListener('click', function() {
     const emailInput = document.getElementById('email-input').value;
     if (emailInput) {
         document.getElementById('email-hidden').value = emailInput; // Set hidden email field
-        document.getElementById('email-container').style.display = 'none'; // Hide email container
-        document.getElementById('questions-container').style.display = 'block'; // Show questions container
-        window.onload = displayText; // Call displayText function to start showing questions
+        displayText(); // Show the first question
+        document.getElementById('text-box').innerHTML = 'Answer the following questions:';
+        document.getElementById('email-input').style.display = 'none'; // Hide email input
+        this.style.display = 'none'; // Hide start button
     } else {
         alert('Please enter a valid email.');
     }
 });
+
+// Optional event listeners for reply, close, unsubscribe buttons
+document.getElementById('reply-btn').addEventListener('click', () => handleChoice('Reply'));
+document.getElementById('close-btn').addEventListener('click', () => handleChoice('Close'));
+document.getElementById('unsubscribe-btn').addEventListener('click', () => handleChoice('Unsubscribe'));
+
+window.onload = () => {
+    document.getElementById('questions-form').style.display = 'block'; // Show form by default
+};
