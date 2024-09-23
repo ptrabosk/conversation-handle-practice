@@ -357,9 +357,14 @@ document.getElementById('start-btn').addEventListener('click', function() {
 
 document.getElementById('questions-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent form submission
-    const formData = new FormData(this);
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`); // Log the input values
-    }
+
+    // Log input values for each question
+    const inputs = this.querySelectorAll('input[type="text"]');
+    inputs.forEach((input, index) => {
+        console.log(`Question ${index + 1}: ${input.value}`); // Log each answer
+        // Here, you can also check the answer against the correct answer
+        // Example: if (input.value === texts[index].correct) score++;
+    });
+
     showResults();
 });
