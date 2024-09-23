@@ -7,18 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Email input section -->
-    <div class="container" id="email-container">
-        <h2>Please enter your email to start:</h2>
-        <input type="email" id="email-input" placeholder="Enter your email" required>
-        <button id="start-btn">Start</button>
-    </div>
-
-    <!-- Questions section -->
-    <div class="container" id="questions-container" style="display: none;">
+    <div class="container" id="questions-container">
         <div id="text-box">
-            <h2>Please answer the questions below:</h2>
+            <h2>Please enter your email to start:</h2>
+            <input type="email" id="email-input" placeholder="Enter your email" required>
+            <button id="start-btn">Start</button>
         </div>
+
         <form id="questions-form" action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" method="POST">
             <!-- Email field (hidden, automatically filled) -->
             <input type="hidden" id="email-hidden" name="email">
@@ -34,7 +29,7 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" id="submit-btn">Submit</button>
+            <button type="submit" id="submit-btn" style="display: none;">Submit</button>
         </form>
     </div>
 
