@@ -9,16 +9,19 @@
 <body>
     <div class="container" id="questions-container">
         <div id="text-box">
-            <h2>Please enter your email to start:</h2>
-            <input type="email" id="email-input" placeholder="Enter your email" required>
-            <button id="start-btn">Start</button>
+            <h2>Answer the following questions:</h2>
         </div>
 
-        <form id="questions-form" style="display: none;">
-            <input type="hidden" id="email-hidden" name="email">
+        <form id="questions-form">
             <div id="dynamic-questions"></div>
-            <button type="submit" id="submit-btn" style="display: none;">Submit</button>
+            <button type="submit" id="submit-btn">Submit</button>
         </form>
+
+        <div id="email-container" style="display: none;">
+            <h2>Please enter your email to submit:</h2>
+            <input type="email" id="email-input" placeholder="Enter your email" required>
+            <button id="send-btn">Send</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
