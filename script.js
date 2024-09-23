@@ -309,17 +309,6 @@ const texts = [
         // Add more texts and correct responses here
     ];
 
-let score = 0;
-let attempts = 0;
-const maxAttempts = 20;
-const userChoices = [];
-const usedIndexes = [];  // Track used indexes to ensure uniqueness
-
-const texts = [
-    { text: "Question 1: What is your favorite color?", correct: "Blue" },
-    // Add more questions here...
-];
-
 function getRandomUniqueIndex() {
     let randomIndex;
     do {
@@ -345,10 +334,6 @@ function displayText() {
     }
 }
 
-function handleChoice(choice) {
-    // Logic to handle user choices if applicable
-}
-
 function showResults() {
     const textBox = document.getElementById('text-box');
     textBox.innerHTML = `Your score: ${score}/${maxAttempts}`;
@@ -360,20 +345,21 @@ document.getElementById('start-btn').addEventListener('click', function() {
     const emailInput = document.getElementById('email-input').value;
     if (emailInput) {
         document.getElementById('email-hidden').value = emailInput; // Set hidden email field
-        displayText(); // Show the first question
         document.getElementById('text-box').innerHTML = 'Answer the following questions:';
         document.getElementById('email-input').style.display = 'none'; // Hide email input
         this.style.display = 'none'; // Hide start button
+        document.getElementById('questions-form').style.display = 'block'; // Show questions form
+        displayText(); // Show the first question
     } else {
         alert('Please enter a valid email.');
     }
 });
 
-// Optional event listeners for reply, close, unsubscribe buttons
-document.getElementById('reply-btn').addEventListener('click', () => handleChoice('Reply'));
-document.getElementById('close-btn').addEventListener('click', () => handleChoice('Close'));
-document.getElementById('unsubscribe-btn').addEventListener('click', () => handleChoice('Unsubscribe'));
-
-window.onload = () => {
-    document.getElementById('questions-form').style.display = 'block'; // Show form by default
-};
+document.getElementById('questions-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    const formData = new FormData(this);
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`); // Log the input values
+    }
+    showResults();
+});
