@@ -14,19 +14,12 @@
             <button id="start-btn">Start</button>
         </div>
 
-        <form id="questions-form" action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" method="POST">
-            <!-- Email field (hidden, automatically filled) -->
+        <form id="questions-form" style="display: none;">
+            <!-- Hidden email field -->
             <input type="hidden" id="email-hidden" name="email">
 
             <!-- Dynamic questions will be inserted here -->
             <div id="dynamic-questions"></div>
-
-            <!-- Buttons for user choices -->
-            <div class="buttons">
-                <button type="button" id="reply-btn">Reply</button>
-                <button type="button" id="close-btn">Close</button>
-                <button type="button" id="unsubscribe-btn">Unsubscribe</button>
-            </div>
 
             <!-- Submit button -->
             <button type="submit" id="submit-btn" style="display: none;">Submit</button>
