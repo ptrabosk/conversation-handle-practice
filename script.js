@@ -437,3 +437,15 @@ document.addEventListener('DOMContentLoaded', () => {
 window.onload = () => {
     // The text box can be displayed only after email is entered
 };
+
+document.getElementById('start-btn').addEventListener('click', function() {
+    const emailInput = document.getElementById('email-input').value;
+    if (emailInput) {
+        document.getElementById('email-hidden').value = emailInput; // Set hidden email field
+        document.getElementById('email-container').style.display = 'none'; // Hide email container
+        document.getElementById('questions-container').style.display = 'block'; // Show questions container
+        window.onload = displayText; // Call displayText function to start showing questions
+    } else {
+        alert('Please enter a valid email.');
+    }
+});
