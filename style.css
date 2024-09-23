@@ -29,15 +29,8 @@ body {
     text-align: left;
     font-family: "San Francisco", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     width: 100%;
-    height: 150px;
+    height: auto;  /* Adjusted for dynamic content */
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    overflow-y: auto;  /* Allow scrolling for results */
-}
-
-#text-box.results {
-    height: 400px;  /* Increased height for the results box */
 }
 
 .buttons {
@@ -63,10 +56,6 @@ body {
 }
 
 /* Styles for the email input */
-#email-container {
-    margin-bottom: 20px;
-}
-
 #email-input {
     padding: 10px;
     font-size: 18px;
